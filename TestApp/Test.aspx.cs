@@ -7,12 +7,15 @@ using System.Web.UI.WebControls;
 
 namespace TestApp
 {
-    public partial class SiteMaster : MasterPage
+    public partial class Test : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
 
+        protected void btnCheckNewActiveDevice_Click(object sender, EventArgs e)
+        {
+        }
     }
 }

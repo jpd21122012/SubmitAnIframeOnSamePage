@@ -1,42 +1,52 @@
-﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="TestApp._Default" %>
+﻿<%@ Page Title="Home Page" Language="C#" EnableEventValidation="false" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="TestApp._Default" %>
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+<script type="text/javascript">
+    function enviarDatosAFrame(frameNombre) {
+        var formulario = document.getElementById('form1');
+        formulario.target = frameNombre;
 
-<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+        setTimeout('formularioInicializar(\'' + formulario.id + '\');', 2000);
+    }
+    function formularioInicializar(formularioNombre) {
+        $('#' + formularioNombre).attr('target', '');
+    }
+      
+</script>
 
-    <div class="jumbotron">
-        <h1>ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-        <p><a href="http://www.asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-    </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".postbackToFrame").click(function () {
+            var form = $(this).parents("form:first");
+            var formNombre = $(form).attr("id");
+            var frameNombre = $(this).data("frameDestino");
+            if (frameNombre != null || frameNombre != 'undefined') {
 
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Getting started</h2>
-            <p>
-                ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-            A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
-            </p>
-            <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Get more libraries</h2>
-            <p>
-                NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
-            </p>
-            <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Web Hosting</h2>
-            <p>
-                You can easily find a web hosting company that offers the right mix of features and price for your applications.
-            </p>
-            <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
-            </p>
-        </div>
-    </div>
+                $(form).attr('target', frameNombre);
+            }
+
+            setTimeout('formularioInicializar(\'' + formNombre + '\');', 2000);
+        });
+    })
+</script>
+
 
 </asp:Content>
+<asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
+    <h2>Iframes: Basico - Pagina Padre</h2>
+    <p>Como enviar el submit del formulario a un iframe contenido en la misma pagina </p>
+    
+    Ingrese un Nombre: <asp:TextBox ID="txtNombre" runat="server" ClientIDMode="Static"></asp:TextBox>
+        
+    <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" PostBackUrl="~/IframePage.aspx"  OnClientClick="enviarDatosAFrame('iframePaginaHija');"/>
+    
+    <asp:Button ID="btnAceptarConjQuery" runat="server" Text="Aceptar (con jQuery)" PostBackUrl="~/IframePage.aspx"  CssClass="postbackToFrame" data-frameDestino="iframePaginaHija"   />
+
+    <iframe id="iframePaginaHija" name="iframePaginaHija" src="IframePage.aspx" width="100%" height="200px"></iframe>
+    <p>&nbsp;</p>
+    <asp:Label ID="lblHora" runat="server" Text="lblHora"></asp:Label>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+
+</asp:Content>
+
